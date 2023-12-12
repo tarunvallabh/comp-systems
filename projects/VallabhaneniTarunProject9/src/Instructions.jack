@@ -1,0 +1,44 @@
+class Instructions {
+    field int key;
+
+    constructor Instructions new(){
+        do game_instr();
+        return this;
+    }
+
+    method void game_instr() {
+        // Outputs the instructions.
+        do Output.moveCursor(1, 25);
+        do Output.printString("Blob Game!!!");
+        do Output.println();
+        do Output.println();
+        do Output.printString("How to Play:");
+        do Output.println();
+        do Output.println();
+        do Output.printString("1. Hello! You are a blob. Your name is Blobby. You are");
+        do Output.println();
+        do Output.printString("hungry and want to eat food. However, there is danger.");
+        do Output.println();
+        do Output.printString("2. Avoid the poison (black circles) and eat all the donuts");
+        do Output.println();
+        do Output.printString("(white circles with black borders!)");
+        do Output.println();
+        do Output.printString("3. Press the arrow keys to start moving. Careful, you can't stop when you start moving!");
+        do Output.println();
+        do Output.printString("4. There is a fence around you and you can't touch it. Be");
+        do Output.println();
+        do Output.printString("careful not to run into it!");
+        do Output.println();
+        do Output.println();
+        do Output.printString("Are you ready to eat? Press any key");
+        do Output.println();
+        do Output.printString("to start the game!");
+        let key = Keyboard.readChar();
+        return;
+    }
+
+    method void dispose() {
+        do Memory.deAlloc(this);
+        return;
+    }
+}

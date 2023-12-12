@@ -1,0 +1,213 @@
+/*
+Implementation of the Blob Game. The Blob Game is a game where the user controls 
+a blob with the arrow keys. The blob must avoid the poison blobs and eat all 
+the food blobs to win. When the game starts, the user is presented with
+instructions on how to play the game. The user can press any key to start the game.
+The user can press the arrow keys to move the blob. The game ends when the blob
+hits the fence, or eats all the food blobs, or eats a poison blob. 
+*/
+
+class Game {
+    field int screenWidth, screenHeight;
+    field int direction;
+    field PoisonBlob pb1, pb2, pb3, pb4, pb5; // Poison blobs
+    field FoodBlob fb1, fb2, fb3, fb4, fb5; // Food blobs
+    field Blob blob;
+    field Instructions instructions; // Instructions for the game
+
+    /** Creates a new game. */
+    constructor Game new() {
+        let screenWidth = 500; 
+        let screenHeight = 244; 
+
+        // show instructions first
+        let instructions = Instructions.new();
+        do Screen.clearScreen(); // clear screen before drawing game
+
+        // create game objects
+        let blob = Blob.new(100, 140, 10);
+        let pb1 = PoisonBlob.new(100, 82, 15);
+        let pb2 = PoisonBlob.new(252, 170, 15);
+        let pb3 = PoisonBlob.new(420, 140, 15);
+        let pb4 = PoisonBlob.new(310, 50, 15);
+        let pb5 = PoisonBlob.new(50, 200, 15);
+        let fb1 = FoodBlob.new(200, 200, 4);
+        let fb2 = FoodBlob.new(300, 100, 4);
+        let fb3 = FoodBlob.new(400, 200, 4);
+        let fb4 = FoodBlob.new(100, 30, 4);
+        let fb5 = FoodBlob.new(420, 60, 4);
+
+        do drawFence();
+        do drawPoison();
+        do drawFood();
+
+        return this;
+
+    }
+
+    /** Disposes of all game objects. */
+    method void dispose() {
+        do blob.dispose();
+        do pb1.dispose();
+        do pb2.dispose();
+        do pb3.dispose();
+        do pb4.dispose();
+        do Memory.deAlloc(this);
+        return;
+    }
+
+    /** Draws the fence. */
+    method void drawFence() {
+        do Screen.setColor(true);
+        do Screen.drawLine(12,12, 12,244);
+        do Screen.drawLine(12,12, 500,12);
+        do Screen.drawLine(12,244, 500,244);
+        do Screen.drawLine(500,12, 500,244);
+        return;
+    }
+
+    /** Checks if the game is over. */
+    method void checkGame() {
+    	var boolean eaten;
+        var boolen edge;
+        var boolean food;
+        var boolean foodCount;
+        // check if blob has collided with poison
+        let eaten = (blob.checkCollision(pb1) | blob.checkCollision(pb2) | blob.checkCollision(pb3) | blob.checkCollision(pb4) | blob.checkCollision(pb5));
+        if (eaten) {
+            do Screen.clearScreen();
+            do Output.moveCursor(11, 20);
+            do Output.printString("You were poisoned :(");
+            do Output.moveCursor(13, 24);
+            do Output.printString("GAME OVER");
+            do Sys.halt();
+        	return;
+        }
+
+        // check if blob has collided with fence
+        let edge = checkBorderCollision();
+        if (edge) {
+            do Screen.clearScreen();
+            do Output.moveCursor(10, 20);
+            do Output.printString("You hit the fence :(");
+            do Output.moveCursor(13, 24);
+            do Output.printString("GAME OVER");
+            do Sys.halt();
+            return;
+        }
+
+        // check if blob has eaten a food blob
+        let food = (blob.checkFood(fb1) | blob.checkFood(fb2) | blob.checkFood(fb3) | blob.checkFood(fb4) | blob.checkFood(fb5));
+        // If food has been eaten, erase and dispose of the food blob
+        if (food) {
+            if (blob.checkFood(fb1)) {
+                do fb1.erase();
+                do fb1.dispose();
+                do fb1.setEaten();
+            }
+            if (blob.checkFood(fb2)) {
+                do fb2.erase();
+                do fb2.dispose();
+                do fb2.setEaten();
+            }
+            if (blob.checkFood(fb3)) {
+                do fb3.erase();
+                do fb3.dispose();
+                do fb3.setEaten();
+            }
+            if (blob.checkFood(fb4)) {
+                do fb4.erase();
+                do fb4.dispose();
+                do fb4.setEaten();
+            }
+            if (blob.checkFood(fb5)) {
+                do fb5.erase();
+                do fb5.dispose();
+                do fb5.setEaten();
+            }
+
+            // check if all food has been eaten and end game if so
+            let foodCount = (fb1.getEaten() & fb2.getEaten() & fb3.getEaten() & fb4.getEaten() & fb5.getEaten());
+            if (foodCount) {
+                do Screen.clearScreen();
+                do Output.moveCursor(10, 18);
+                do Output.printString("You are stuffed :), Good job!");
+                do Output.moveCursor(13, 24);
+                do Output.printString("YOU WIN!!!");
+                do Sys.halt();
+                return;
+            }
+            return;
+        }
+        return;
+    }
+    	
+
+
+    // Main game loop
+    /** Runs the game: handles the user's inputs and moves the square accordingly */
+    method void run() {
+        var char key;  // the key currently pressed by the user
+        var boolean exit;
+        let exit = false;
+
+        while (~exit) {
+            while (key = 0) {
+                let key = Keyboard.keyPressed(); // Ensure key is updated inside the loop
+                do updateBlob();
+                do checkGame();
+            }
+
+            // Handle different keys pressed
+            if (key = 131) { let direction = 1; } // up arrow
+            if (key = 133) { let direction = 2; }  // down arrow
+            if (key = 130) { let direction = 3; } // left arrow
+            if (key = 132) { let direction = 4; }  // right arrow
+            
+            // waits for the key to be released
+            while (~(key = 0)) {
+                let key = Keyboard.keyPressed();
+                do updateBlob();
+                do checkGame();
+            }
+        }
+        return;
+    }
+
+    /** Updates the blob's position based on the key pressed. */
+    method void updateBlob(){
+        if (direction = 1) { do blob.move(0,-1); }
+        if (direction = 2) { do blob.move(0,1); }
+        if (direction = 3) { do blob.move(-1,0); }
+        if (direction = 4) { do blob.move(1,0); }
+        do Sys.wait(10);  // delays the next movement
+        return;
+    }
+
+    /** Draws the poison blobs. */
+    method void drawPoison() {
+        do pb1.draw();
+        do pb2.draw();
+        do pb3.draw();
+        do pb4.draw();
+        do pb5.draw();
+        return;
+    }
+    /** Draws the food blobs. */
+    method void drawFood() {
+        do fb1.draw();
+        do fb2.draw();
+        do fb3.draw();
+        do fb4.draw();
+        do fb5.draw();
+        return;
+    }
+
+    /** Checks if the blob has collided with the fence. */
+    method boolean checkBorderCollision() {
+        if (((blob.getX() + blob.getSize()) > 500) | ((blob.getX() - blob.getSize()) < 12) | ((blob.getY() - blob.getSize()) < 12) | ((blob.getY() + blob.getSize()) > 244)) {
+            return true;
+        }
+    	return false;
+    }
+}

@@ -1,0 +1,55 @@
+/*
+Implementation of the PoisonBlob class, which represents a poison blob in the game.
+*/
+
+class PoisonBlob{
+    field int x, y; // center of the blob
+    field int size; // size of the blob
+
+    /** Constructs a new PoisonBlob with specified position and size.  
+    * @param startX the x coordinate of the center of the blob
+    * @param startY the y coordinate of the center of the blob
+    * @param startSize the size of the blob
+    */
+    constructor PoisonBlob new (int startX, int startY, int startSize){
+        let x = startX;
+        let y = startY;
+        let size = startSize;
+        return this;
+    }
+
+    /** Draws this poison blob on the screen. */
+    method void draw() {
+        do Screen.setColor(true);
+        do Screen.drawCircle(x, y, size);
+        return;
+    }
+
+    /** Disposes this poison blob and deallocates memory */
+    method void dispose() {
+        do Memory.deAlloc(this);
+        return;
+    }
+
+    /** Erases this poison blob from the screen. */
+    method void erase() {
+        do Screen.setColor(false);
+        do Screen.drawCircle(x, y, size);
+        return;
+    }
+
+    /** Gets the x coordinate of the center of this poison blob */
+    method int getX() {
+        return x;
+    }
+
+    /** Gets the y coordinate of the center of this poison blob */
+    method int getY() {
+        return y;
+    }
+
+    /** Gets the size of this poison blob */
+    method int getSize() {
+        return size;
+    }
+}

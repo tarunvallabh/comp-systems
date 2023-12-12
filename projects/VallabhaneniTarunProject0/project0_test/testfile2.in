@@ -1,0 +1,25 @@
+/*       MultiLineComment1
+
+MultiLineComment2
+MultiLineComment3   */
+Code1
+Code2
+	Code3
+         Code4
+		 
+Code5
+//SingleLineComment1
+
+//SingleLineComment2
+//SingleLineComment3
+
+Code6
+
+Code7
+
+/* 
+MultiLineComment4
+*/
+
+Code8  //SingleLineCommen_InLine1
+Code9

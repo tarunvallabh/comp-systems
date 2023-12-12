@@ -1,0 +1,76 @@
+/*
+Implementation of the FoodBlob class, which represents a single food blob in the game.
+*/
+class FoodBlob {
+    field int x, y; // Position of the food blob
+    field int size; // Size (radius) of the food blob
+    field boolean isEaten; // Whether or not the food blob has been eaten
+
+    /** Constructs a new Food Blob with a given size and coordinates.
+    * @param startX The x-coordinate of the initial position of the food blob
+    * @param startY The y-coordinate of the initial position of the food blob
+    * @param startSize The size of the food blob
+    */
+    constructor FoodBlob new(int startX, int startY, int startSize) {
+        let size = startSize;
+        let x = startX;
+        let y = startY;
+        let isEaten = false;
+        // Initial position will be set by a separate method
+        return this;
+    }
+
+    /** Draws this food blob. */
+    method void draw() {
+        // Draw outer black circle
+        do Screen.setColor(true); // Assuming true sets color to black
+        do Screen.drawCircle(x, y, size);
+
+        // Draw inner white circle
+        do Screen.setColor(false); // Assuming false sets color to white
+        do Screen.drawCircle(x, y, size - 2); // Slightly smaller to create a border
+        return;
+    }
+
+    /** Erases this food blob. */
+    method void erase() {
+        do Screen.setColor(false);
+        do Screen.drawCircle(x, y, size);
+        return;
+    }
+
+    /** Disposes this food blob and deallocates memory. */
+    method void dispose() {
+        do Memory.deAlloc(this);
+        return;
+    }
+
+    /** Gets the x coordinate of the center of this food blob */
+    method int getX() {
+        return x;
+    }
+
+    /** Gets the y coordinate of the center of this food blob */
+    method int getY() {
+        return y;
+    }
+
+    
+    /** Gets the size of this food blob */
+    method int getSize() {
+        return size;
+    }
+
+    /** Gets whether the food blob has been eaten */
+    method boolean getEaten() {
+        return isEaten;
+    }
+
+    /** Sets the food blob as eaten */
+    method void setEaten() {
+        let isEaten = true; 
+        return;
+    }
+
+
+}

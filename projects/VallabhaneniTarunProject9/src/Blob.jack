@@ -1,0 +1,143 @@
+/*
+Implementation of the Blob class. A blob is the figure that the player controls.
+*/
+
+class Blob {
+    field int x, y; // Position of the blob
+    field int radius; // Radius of the blob
+    field int score; // Score of the blob
+
+    /** Constructs a new blob with the specified size and position.
+    * @param startX the initial x coordinate
+    * @param startY the initial y coordinate
+    * @param startRadius the initial radius
+    */
+    constructor Blob new(int startX, int startY, int startRadius) {
+        let x = startX;
+        let y = startY;
+        let radius = startRadius; // Set the radius for the blob
+        do draw();
+        return this;
+    }
+
+    /** Disposes the blob and deallocates the object's memory. */
+    method void dispose() {
+        do Memory.deAlloc(this);
+        return;
+    }
+
+    /** Draws the blob on the screen. */
+    method void draw() {
+        var int eyeRadius;
+        var int leftEyeX, leftEyeY, rightEyeX, rightEyeY;
+        var int smileWidth, smileHeight;
+        var int smileX, smileY; 
+        // Draw the main circle for the blob
+        do Screen.setColor(true);
+        do Screen.drawCircle(x, y, radius);
+
+        // Drawing eyes
+        let eyeRadius = radius / 5; // Adjust eye size relative to the blob size
+
+        // Calculate eye positions
+        let leftEyeX = x - (radius / 3);
+        let leftEyeY = y - (radius / 3);
+        let rightEyeX = x + (radius / 3);
+        let rightEyeY = y - (radius / 3);
+
+        // Draw eyes
+        do Screen.setColor(false);
+        do Screen.drawCircle(leftEyeX, leftEyeY, eyeRadius);
+        do Screen.drawCircle(rightEyeX, rightEyeY, eyeRadius);
+
+        // Drawing a smile as a rectangle
+        let smileWidth = radius / 2; // Width of the smile
+        let smileHeight = radius / 5; // Height of the smile
+
+        let smileX = x - (smileWidth / 2);
+        let smileY = y + (radius / 2) - (smileHeight / 2);
+
+        // Draw the smile
+        do Screen.drawRectangle(smileX, smileY, smileX + smileWidth, smileY + smileHeight);
+
+        return;
+}
+
+
+    /** Erases the blob from the screen. */
+    method void erase() {
+        do Screen.setColor(false);
+        do Screen.drawCircle(x, y, radius);
+        return;
+    }
+
+    /** Moves the blob. */
+    method void move(int dx, int dy) {
+        do erase(); // Erase the blob at the current position
+
+        // Update the position
+        let x = x + dx;
+        let y = y + dy;
+
+        do draw(); // Draw the blob at the new position
+        return;
+    }
+
+    /** Checks if the blob collides with the specified poison blob. 
+    * @param pb the poison blob to check for collision
+    */
+    method boolean checkCollision(PoisonBlob pb) {
+        var int distanceX, distanceY;
+        var int distanceSquared, radiiSumSquared;
+        var int radiusSum;
+
+        let distanceX = pb.getX() - x;
+        let distanceY = pb.getY() - y;
+        let distanceX = (distanceX / 10); // scale down to prevent overflow
+        let distanceY = (distanceY / 10); // scale down to prevent overflow
+
+        let distanceSquared = (distanceX * distanceX) + (distanceY * distanceY);
+
+        let radiusSum = ((radius + pb.getSize())/10); // scale down to prevent overflow
+        
+        let radiiSumSquared = ((radiusSum * radiusSum));
+
+        return (distanceSquared < radiiSumSquared);
+    }
+    
+    /** Checks if the blob collides with the specified food blob.
+    * @param fb the food blob to check for collision
+    */
+    method boolean checkFood(FoodBlob fb) {
+        var int distanceX, distanceY;
+        var int distanceSquared, radiiSumSquared;
+        var int radiusSum;
+
+
+        let distanceX = fb.getX() - x;
+        let distanceY = fb.getY() - y;
+        let distanceX = (distanceX / 10); // scale down to prevent overflow
+        let distanceY = (distanceY / 10); // scale down to prevent overflow
+
+        let distanceSquared = (distanceX * distanceX) + (distanceY * distanceY);
+        let radiusSum = ((radius + fb.getSize())/10); // scale down to prevent overflow
+        
+        let radiiSumSquared = ((radiusSum * radiusSum));
+        return (distanceSquared < radiiSumSquared);
+    }
+
+    /** Gets the current size of this blob. */
+    method int getSize(){
+        return radius;
+    }
+
+    /** Gets the current x coordinate of the center of this blob. */
+    method int getX() {
+        return x;
+    }
+
+    /** Gets the current y coordinate of the center of this blob. */
+    method int getY() {
+        return y;
+    }
+}
