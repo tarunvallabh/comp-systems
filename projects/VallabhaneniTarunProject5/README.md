@@ -4,7 +4,7 @@
 
 In this project, I have implemented the following chips in HDL and tested their functionality using the provided test scripts. Below is a list of the chips that have been implemented: 
 
-	1. Memory
+    1. Memory
     2. CPU
     3. Computer
 	
