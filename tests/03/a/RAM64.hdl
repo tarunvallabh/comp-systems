@@ -1,0 +1,34 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/03/a/RAM64.hdl
+
+/**
+ * Memory of 64 registers, each 16 bit-wide. Out holds the value
+ * stored at the memory location specified by address. If load==1, then 
+ * the in value is loaded into the memory location specified by address 
+ * (the loaded value will be emitted to out from the next time step onward).
+ */
+
+CHIP RAM64 {
+    IN in[16], load, address[6];
+    OUT out[16];
+
+    PARTS:
+    // select load bit 
+    DMux8Way(in = load, sel = address[3..5], a = a, b = b, c = c, d = d, e = e, f = f, g = g, h = h);
+    
+    // RAM8 0-8
+    RAM8(in = in, load = a, address = address[0..2], out = ramA);
+    RAM8(in = in, load = b, address = address[0..2], out = ramB);
+    RAM8(in = in, load = c, address = address[0..2], out = ramC);
+    RAM8(in = in, load = d, address = address[0..2], out = ramD);
+    RAM8(in = in, load = e, address = address[0..2], out = ramE);
+    RAM8(in = in, load = f, address = address[0..2], out = ramF);
+    RAM8(in = in, load = g, address = address[0..2], out = ramG);
+    RAM8(in = in, load = h, address = address[0..2], out = ramH);
+    
+    // select correct output
+    Mux8Way16(a = ramA, b = ramB, c = ramC, d = ramD, e = ramE, f = ramF, g = ramG, h = ramH, sel = address[3..5], out = out);
+
+}
