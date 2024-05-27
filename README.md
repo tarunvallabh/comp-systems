@@ -1,5 +1,5 @@
-# MPCS 52011: Introduction to Computer Systems - Student Coursework Repository
-Welcome to my GitHub repository for MPCS 52011: Introduction to Computer Systems! As a student who has recently completed this course, adapted from the Nand2Tetris syllabus, I've compiled all my projects and notes here. This repository serves as a showcase of my journey through the course, where I built a general-purpose computer system from the ground up, and explored the key ideas and techniques in hardware and software system design.
+# Nand2Tetris - Student Coursework Repository
+Welcome to my GitHub repository for Introduction to Computer Systems! As a student who has recently completed this course, adapted from the Nand2Tetris syllabus, I've compiled all my projects and notes here. This repository serves as a showcase of my journey through the course, where I built a general-purpose computer system from the ground up, and explored the key ideas and techniques in hardware and software system design.
 
 ## Overview
 This course was a hands-on exploration into the world of computing, from basic logic gates to the complexities of a high-level programming language. I engaged with every aspect of system design, learning valuable skills and gaining a comprehensive understanding of how modern computing systems function.
